@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Incident Type Occurrence Chart</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Include jQuery, Chart.js, and Bootstrap for styling and dropdown functionality -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="help.html">Help</a></li>
+      </ul>
+    </nav>
+    <div class="container mt-4">
+      <h1 class="text-center">Incident Type Occurrence Chart</h1>
+
+      <!-- Dropdown for selecting incident type -->
+      <div class="mt-4">
+        <h2>Select Incident Type:</h2>
+        <form id="incidentTypeForm">
+          <label for="incidentTypeSelect">Incident Type:</label>
+          <select id="incidentTypeSelect" class="form-control">
+            <!-- Options will be populated dynamically using JavaScript -->
+          </select>
+          <input
+            type="submit"
+            value="Generate Chart"
+            class="btn btn-primary mt-2"
+          />
+        </form>
+        <div id="chartContainer"></div>
+      </div>
+    </div>
+
+    <script>
+      // Replace "YOURAPPTOKENHERE" with your actual app token
+      const appToken = "8bXBtSpWDBQfz2iTlipUrmqeJ";
+
+      // API URL for incidents
+      const apiUrl = `https://data.princegeorgescountymd.gov/resource/xjru-idbe.json?$limit=50&$$app_token=${appToken}`;
+
+      // Fetch data from the API
+      $.ajax({
+        url: apiUrl,
+        type: "GET",
+        dataType: "json",
+      })
+        .done(function (data) {
+          // Populate incident types in the dropdown
+          populateDropdown(getUniqueIncidentTypes(data));
+
+          // Event handler for incident type form submission
+          $("#incidentTypeForm").submit(function (event) {
+            event.preventDefault();
+
+            const selectedIncidentType = $("#incidentTypeSelect").val();
+
+            // Call the function to generate and display the chart
+            displayIncidentTypeChart(data, selectedIncidentType);
+          });
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+          console.error(`Error: ${textStatus}, ${errorThrown}`);
+        });
+
+      // Function to get unique incident types
+      function getUniqueIncidentTypes(data) {
+        const incidentTypes = new Set();
+        data.forEach((incident) => {
+          incidentTypes.add(incident.clearance_code_inc_type);
+        });
+        return Array.from(incidentTypes);
+      }
+
+      // Function to populate the dropdown with incident types
+      function populateDropdown(incidentTypes) {
+        const dropdown = $("#incidentTypeSelect");
+
+        incidentTypes.forEach((incidentType) => {
+          dropdown.append(
+            `<option value="${incidentType}">${incidentType}</option>`
+          );
+        });
+      }
+
+      // Function to display the chart for a specific incident type
+      function displayIncidentTypeChart(data, selectedIncidentType) {
+        const chartCanvas = document.createElement("canvas");
+        chartCanvas.width = 800;
+        chartCanvas.height = 400;
+
+        const ctx = chartCanvas.getContext("2d");
+
+        // Filter data for the selected incident type
+        const filteredData = data.filter(
+          (incident) =>
+            incident.clearance_code_inc_type === selectedIncidentType
+        );
+
+        // Process data to calculate incident occurrences per month
+        const incidentOccurrences = calculateIncidentOccurrences(filteredData);
+
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: Object.keys(incidentOccurrences),
+            datasets: [
+              {
+                label: `${selectedIncidentType} Occurrences`,
+                data: Object.values(incidentOccurrences),
+                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                borderColor: "rgba(75, 192, 192, 1)",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              x: {
+                type: "category",
+                title: {
+                  display: true,
+                  text: "Month-Year",
+                },
+              },
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "Incident Count",
+                },
+              },
+            },
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  title: (context) => context[0].label,
+                  label: (context) => {
+                    const entry = filteredData[context.dataIndex];
+                    const count = context.parsed.y;
+                    const streetAddresses = getUniqueStreetAddresses(
+                      filteredData,
+                      entry.date.substr(0, 7)
+                    );
+                    return `Count: ${count}, Street Addresses: ${streetAddresses.join(
+                      ", "
+                    )}`;
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        // Clear previous chart and append the new one
+        $("#chartContainer").empty().append(chartCanvas);
+      }
+
+      // Function to calculate incident occurrences per month
+      function calculateIncidentOccurrences(data) {
+        const incidentOccurrences = {};
+
+        // Loop through the data and count occurrences of the selected incident type per month
+        data.forEach((incident) => {
+          const monthYear = incident.date.substr(0, 7); // Extract YYYY-MM from the date
+          incidentOccurrences[monthYear] =
+            (incidentOccurrences[monthYear] || 0) + 1;
+        });
+
+        return incidentOccurrences;
+      }
+
+      // Function to get unique street addresses for a specific month
+      function getUniqueStreetAddresses(data, monthYear) {
+        const streetAddresses = new Set();
+        data
+          .filter((incident) => incident.date.substr(0, 7) === monthYear)
+          .forEach((incident) => streetAddresses.add(incident.street_address));
+        return Array.from(streetAddresses);
+      }
+    </script>
+  </body>
+</html>

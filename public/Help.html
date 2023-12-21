@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Add custom styles for the two sides */
+      .container {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+      }
+
+      .left-side,
+      .right-side {
+        width: 48%; /* Adjust the width based on your design */
+      }
+
+      .box {
+        background-color: #f2f2f2;
+        padding: 20px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="help.html">Help</a></li>
+      </ul>
+    </nav>
+    <div class="container">
+      <!-- Left Side - Contact Support -->
+      <div class="left-side">
+        <h2>Contact Support</h2>
+        <p>Contact our support team for assistance:</p>
+        <p>Email: support@example.com</p>
+        <!-- Add more contact details if needed -->
+
+        <!-- Content for the box on the left side -->
+        <div class="box">
+          <form id="myForm" action="thankyou.html" method="post">
+            <label for="fname">First Name:</label>
+            <input type="text" id="fname" name="fname" /><br />
+
+            <label for="lname">Last Name:</label>
+            <input type="text" id="lname" name="lname" /><br />
+
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required /><br />
+
+            <label for="problem">What do you need help with?:</label>
+            <textarea id="problem" name="problem" rows="5" cols="50"></textarea
+            ><br />
+
+            <input type="submit" value="Submit" />
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Side - Guide and FAQ -->
+      <div class="right-side">
+        <!-- Guide on How to Use the Webpage -->
+        <h2>Guide on How to Use the Webpage</h2>
+        <p>
+          Click anywhere on Prince George County to get a more through breakdown
+          of the crime rate.
+        </p>
+
+        <!-- FAQ Section -->
+        <h2>FAQ</h2>
+        <!-- Add frequently asked questions and answers here -->
+        <dl>
+          <dt>
+            <strong>Q:What is the primary goal of SecureWatch PG?</strong>
+          </dt>
+          <dd>
+            <strong>A:</strong> The primary goal is to address escalating crime
+            rates in PG County, focusing on incidents from July 2023 to the
+            present. The aim is to provide real-time alerts and insights into
+            prevalent crimes, empowering residents and visitors for enhanced
+            safety.
+          </dd>
+
+          <dt><strong>Q:What is SecureWatch PG's mission?</strong></dt>
+          <dd>
+            <strong>A:</strong> The mission is to leverage technology for a
+            safer environment in PG County. SecureWatch PG is committed to
+            delivering real-time information on crime incidents, allowing users
+            to stay informed, make educated decisions, and contribute to the
+            reduction of crime rates in a proactive community.
+          </dd>
+
+          <dt><strong>Q:What can users expect on the home page?</strong></dt>
+          <dd>
+            <strong>A:</strong> Users can expect an interactive experience with
+            dynamic incident markers that refresh on each visit. Clicking on a
+            marker reveals real-time details like date, location, and incident
+            type. The Prince George County map, highlighted in red, offers an
+            exclusive feature, providing a breakdown of each incident and their
+            monthly occurrences. Additionally, the home page showcases the ten
+            most recent incidents.
+          </dd>
+
+          <dt><strong>Q: What does the dedicated help page offer?</strong></dt>
+          <dd>
+            <strong>A:</strong> The help page serves as a user-friendly platform
+            for submitting feedback and finding contact information. It provides
+            visitors with a responsive avenue for interaction and support.
+          </dd>
+        </dl>
+
+        <!-- Add more FAQ entries as needed -->
+      </div>
+    </div>
+  </body>
+</html>

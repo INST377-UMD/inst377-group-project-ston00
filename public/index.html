@@ -1,0 +1,108 @@
+ <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crime Incidents Map</title>
+
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Include external JavaScript file -->
+    <script src="mapscript.js" defer></script>
+
+    <!-- Leaflet Map Library-->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+
+    <!-- Define map container height and width -->
+    <style>
+      #map {
+        height: 500px;
+        width: 100%;
+      }
+
+      table {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+
+      caption {
+        text-align: center;
+        font-size: 1.5em;
+        margin-bottom: 10px;
+      }
+
+      /* Add styles for the container */
+      #map-container {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="help.html">Help</a></li>
+      </ul>
+    </nav>
+
+    <h2> Click in PG County (Red Area) for more details! </h2>
+
+    <!-- Map container -->
+    <div id="map">
+      <script src="mapscript.js"></script>
+    </div>
+
+    <!-- Container above the table -->
+    <div id="map-container">Most Recent Incident</div>
+    
+
+    <!-- Table for displaying data -->
+    <table>
+      <caption>
+        Live, Incident update of Prince George County
+      </caption>
+      <thead>
+        <tr>
+          <th>Incident Case ID</th>
+          <th>Street</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Incident Type</th>
+        </tr>
+      </thead>
+      <tbody id="data-table-body"></tbody>
+    </table>
+  </body>
+</html>
